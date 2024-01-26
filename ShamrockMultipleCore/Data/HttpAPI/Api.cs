@@ -1,0 +1,1332 @@
+﻿using Flurl;
+using Manganese.Text;
+using ShamrockCore.Utils;
+using ShamrockMultipleCore.Data.Model;
+using ShamrockMultipleCore.Models;
+using ShamrockMultipleCore.Receiver.MsgChain;
+using ShamrockMultipleCore.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ShamrockMultipleCore.Data.HttpAPI
+{
+    public class Api
+    {
+        public ConnectConfig config;
+
+        public Api(ConnectConfig config)
+        {
+            this.config = config;
+        }
+
+        #region 接口
+        #region 获取信息
+        /// <summary>
+        /// 获取登录号信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<LoginInfo?> GetLoginInfo()
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetLoginInfo.GetAsync<LoginInfo>(config);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取陌生人信息
+        /// </summary>
+        /// <param name="strangerId"></param>
+        /// <returns></returns>
+        public async Task<Stranger?> GetStrangerInfo(long qq)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetStrangerInfo.GetAsync<Stranger>(config,"user_id=" + qq);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Group>?> GetGroups()
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetGroupList.GetAsync<IEnumerable<Group>>(config);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群信息
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <returns></returns>
+        public async Task<Group?> GetGroupInfo(long groupQQ)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetGroupInfo.GetAsync<Group>(config, "group_id=" + groupQQ);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群成员
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Member>?> GetGroupMemberList(long groupQQ)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetGroupMemberList.GetAsync<IEnumerable<Member>>(config, "group_id=" + groupQQ);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群成员信息
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <param name="qq"></param>
+        /// <returns></returns>
+        public async Task<Member?> GetGroupMemberInfo(long groupQQ, long qq)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetGroupMemberInfo.GetAsync<Member>(config, "group_id=" + groupQQ, "user_id=" + qq);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群荣誉信息
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <returns></returns>
+        public async Task<Honor?> GetGroupHonorInfo(long groupQQ)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetGroupHonorInfo.GetAsync<Honor>(config, "group_id=" + groupQQ);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群系统消息
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <returns></returns>
+        public async Task<GroupSysMsg?> GetGroupSystemMsg(long groupQQ)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetGroupSystemMsg.GetAsync<GroupSysMsg>(config, "group_id=" + groupQQ);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取精华消息列表
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<EssenceMsg>?> GetEssenceMsgs(long groupQQ)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetEssenceMsgList.GetAsync<IEnumerable<EssenceMsg>>(config, "group_id=" + groupQQ);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取好友列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Friend>?> GetFriends()
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetFriendList.GetAsync<IEnumerable<Friend>>(config);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取好友系统消息(未能正确获取到数据)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<FriendSysMsg>?> GetFriendSysMsg()
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetFriendSysMsg.GetAsync<IEnumerable<FriendSysMsg>>(config);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 是否在黑名单中
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IsInBack?> IsBlacklistUin(long qq)
+        {
+            try
+            {
+                var res = await HttpEndpoints.IsBlacklistUin.GetAsync<IsInBack>(config, "user_id=" + qq);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取合并转发内容(不稳定，暂不提供使用)
+        /// 由于QQ内部错误，该接口可能导致闪退等问题的出现！一般是闪退一次后再次重新启动便不再闪退，但是可能无法获取合并转发的内容！
+        /// </summary>
+        /// <param name="id">消息资源ID（卡片消息里面的resId）</param>
+        /// <returns></returns>
+        public async Task<MessageChain?> GetForwardMsg(int id)
+        {
+            try
+            {
+                await Task.Delay(1);
+                return new();
+                //var res = await HttpEndpoints.GetForwardMsg.GetAsync<MessageChain>("id=" + id);
+                //return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取图片
+        /// </summary>
+        /// <param name="fileMd5">文件 MD5</param>
+        /// <returns></returns>
+        public async Task<Model.FileInfo?> GetImage(string fileMd5)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetImage.GetAsync<Model.FileInfo>(config, "file=" + fileMd5);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取语音(要使用此接口, 通常需要安装 ffmpeg, 请参考 OneBot 实现的相关说明)
+        /// </summary>
+        /// <param name="fileMd5">文件 MD5</param>
+        /// <param name="OutFormat">输出格式(mp3、amr、wma、m4a、spx、ogg、wav、flac)</param>
+        /// <returns></returns>
+        public async Task<RecordInfo?> GetRecord(string fileMd5, string OutFormat = "mp3")
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetRecord.GetAsync<RecordInfo>(config, "file=" + fileMd5, "out_format=" + OutFormat);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取消息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<MsgInfo?> GetMsg(long messageId)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetMsg.GetAsync<MsgInfo>(config, "message_id=" + messageId);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取历史消息
+        /// </summary>
+        /// <param name="msgType"></param>
+        /// <param name="qq"></param>
+        /// <param name="groupQQ"></param>
+        /// <param name="count"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<MsgInfo>?> GetHistoryMsg(MessageType msgType, long qq = 0, long groupQQ = 0, int count = 10, int start = 0)
+        {
+            try
+            {
+                var obj = new
+                {
+                    message_type = msgType,
+                    user_id = qq,
+                    group_id = groupQQ,
+                    count,
+                    message_seq = start
+                };
+                var res = await HttpEndpoints.GetHistoryMsg.PostAsync<IEnumerable<MsgInfo>>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群聊历史消息
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="count"></param>    
+        /// <param name="start"></param>
+        /// <returns></returns>
+        public async Task<MessageChain?> GetGroupMsgHistory(long group, int count = 10, int start = 0)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = group,
+                    count,
+                    message_seq = start
+                };
+                var res = await HttpEndpoints.GetGroupMsgHistory.PostAsync<MessageChain>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群公告
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Announcement>?> GetGroupNotice(long groupQQ)
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetGroupNotice.GetAsync<IEnumerable<Announcement>>(config, "group_id=" + groupQQ);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取被禁言的群成员列表
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Banner>?> GetBanList(long groupQQ)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ
+                };
+                var res = await HttpEndpoints.GetBanList.PostAsync<IEnumerable<Banner>>(config, obj);
+                if (res != null)
+                {
+                    foreach (var item in res)
+                    {
+                        item.GroupQQ = groupQQ;
+                    }
+                }
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群文件系统信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<FileSystemInfo?> GetGroupFileSystemInfo(long groupQQ)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ
+                };
+                var res = await HttpEndpoints.GetGroupFileSystemInfo.PostAsync<FileSystemInfo>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群根目录文件列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<FilesFloders?> GetGroupRootFiles(long groupQQ)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                };
+                var res = await HttpEndpoints.GetGroupRootFiles.PostAsync<FilesFloders>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群子目录文件列表
+        /// </summary>
+        /// <returns></returns>
+        public async Task<FilesFloders?> GetGroupFiles(long groupQQ, string folderId)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    folder_id = folderId
+                };
+                var res = await HttpEndpoints.GetGroupFiles.PostAsync<FilesFloders>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取群文件资源链接
+        /// </summary>
+        /// <returns></returns>
+        public async Task<FileBaseInfo?> GetGroupFileUrl(long groupQQ, string fileId, int busid)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    file_id = fileId,
+                    busid
+                };
+                var res = await HttpEndpoints.GetGroupFileUrl.PostAsync<FileBaseInfo>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取手机电池信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<BatteryInfo?> GetDeviceBattery()
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetDeviceBattery.PostAsync<BatteryInfo>(config);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取Shamrock启动时间
+        /// </summary>
+        /// <returns></returns>
+        public async Task<long> GetStartTime()
+        {
+            try
+            {
+                var res = await HttpEndpoints.GetStartTime.PostAsync<long>(config);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取Shamrock日志
+        /// </summary>
+        /// <param name="start">开始的行</param>
+        /// <param name="recent">是否只显示最近的日志</param>
+        /// <returns></returns>
+        public async Task<string> GetLog(int start = 0, bool recent = false)
+        {
+            try
+            {
+                var url = config.HttpUrl + HttpEndpoints.Log.Description();
+                if (start > 0) url = url.SetQueryParam("start", start);
+                var res = await HttpUtil.GetStringAsync(config, url.SetQueryParam("recent", recent));
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 获取机器人可在群@全体成员的剩余次数
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <returns></returns>
+        public async Task<int> GetAtAllCount(long groupQQ)
+        {
+            try
+            {
+                var url = config.HttpUrl + HttpEndpoints.GetAtAllCount.Description();
+                var res = await HttpUtil.GetStringAsync(config, url.SetQueryParam("group_id", groupQQ));
+                var canAtAll = (res.Fetch("can_at_all") ?? "false").ToBool();
+                if (!canAtAll) return 0;
+                var count = res.Fetch("remain_at_all_count_for_uin") ?? "0";
+                return count.ToInt();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        #endregion
+
+        #region 设置/发布信息
+        /// <summary>
+        /// 设置 qq 个人资料
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> SetQQProfile(Profile profile)
+        {
+            try
+            {
+                var res = await HttpEndpoints.SetQQProfile.PostAsync(config, profile);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 撤回消息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> DeleteMsg(long messageId)
+        {
+            try
+            {
+                var res = await HttpEndpoints.DeleteMsg.GetAsync(config, "message_id=" + messageId);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 清除本地缓存消息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> ClearMsgs(MessageType msgType, long qq = 0, long group = 0)
+        {
+            try
+            {
+                var obj = new
+                {
+                    message_type = msgType,
+                    user_id = qq,
+                    group_id = group
+                };
+                var res = await HttpEndpoints.ClearMsgs.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 处理加好友请求
+        /// </summary>
+        /// <param name="flag">加群请求的 flag</param>
+        /// <param name="approve">是否同意请求</param>
+        /// <param name="remark">添加后的好友备注（仅在同意时有效）</param>
+        /// <returns></returns>
+        public async Task<bool> SetFriendAddRequest(string flag, bool approve, string remark = "")
+        {
+            try
+            {
+                var obj = new
+                {
+                    flag,
+                    approve,
+                    remark,
+                };
+                var res = await HttpEndpoints.SetFriendAddRequest.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 处理加群请求／邀请
+        /// </summary>
+        /// <param name="flag">加群请求的 flag</param>
+        /// <param name="type">add或invite（需要和上报消息中的sub_type字段相符）</param>
+        /// <param name="approve">是否同意请求／邀请</param>
+        /// <param name="reason">拒绝理由（仅在拒绝时有效）</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupAddRequest(string flag, string type, bool approve, string reason = "")
+        {
+            try
+            {
+                var obj = new
+                {
+                    flag,
+                    approve,
+                    type,
+                    reason
+                };
+                var res = await HttpEndpoints.SetGroupAddRequest.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 设置群名
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="newName">新名称</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupName(long groupQQ, string newName)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    group_name = newName
+                };
+                var res = await HttpEndpoints.SetGroupName.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 设置群管理
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="qq">要设置的qq</param>
+        /// <param name="enable">是否设置</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupAdmin(long groupQQ, long qq, bool enable = true)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    user_id = qq,
+                    enable
+                };
+                var res = await HttpEndpoints.SetGroupAdmin.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 设置群组专属头衔
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="qq">要设置的qq</param>
+        /// <param name="title">头衔</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupSpecialTitle(long groupQQ, long qq, string title)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    user_id = qq,
+                    special_title = title
+                };
+                var res = await HttpEndpoints.SetGroupSpecialTitle.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 群单人禁言
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="qq">要禁言的qq</param>
+        /// <param name="duration">禁言时长</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupBan(long groupQQ, long qq, long duration)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    user_id = qq,
+                    duration
+                };
+                var res = await HttpEndpoints.SetGroupBan.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 群全体禁言
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="enable">是否禁言</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupWholeBan(long groupQQ, bool enable = true)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    enable
+                };
+                var res = await HttpEndpoints.SetGroupWholeBan.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 设置精华消息
+        /// </summary>
+        /// <param name="messageId">消息ID</param>
+        /// <returns></returns>
+        public async Task<bool> SetEssenceMsg(long messageId)
+        {
+            try
+            {
+                var res = await HttpEndpoints.SetEssenceMsg.GetAsync(config, "message_id=" + messageId);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 移出精华消息
+        /// </summary>
+        /// <param name="messageId">消息ID</param>
+        /// <returns></returns>
+        public async Task<bool> DeleteEssenceMsg(long messageId)
+        {
+            try
+            {
+                var res = await HttpEndpoints.DeleteEssenceMsg.GetAsync(config, "message_id=" + messageId);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 群打卡
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <returns></returns>
+        public async Task<bool> SendGroupSign(long groupQQ)
+        {
+            try
+            {
+                var res = await HttpEndpoints.SendGroupSign.GetAsync(config, "group_id=" + groupQQ);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 发送群公告
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="content">内容</param>
+        /// <param name="image">图片,支持base64、http(s)和本地路径</param>
+        /// <returns></returns>
+        public async Task<bool> SendGroupNotice(long groupQQ, string content, string? image = null)
+        {
+            try
+            {
+                bool res = false;
+                if (image == null)
+                {
+                    var obj = new
+                    {
+                        group_id = groupQQ,
+                        content
+                    };
+                    res = await HttpEndpoints.SendGroupNotice.PostAsync(config, obj);
+                }
+                else
+                {
+                    var obj = new
+                    {
+                        group_id = groupQQ,
+                        content,
+                        image
+                    };
+                    res = await HttpEndpoints.SendGroupNotice.PostAsync(config, obj);
+                }
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 群组踢人
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="qq">qq号</param>
+        /// <param name="rejectAddAgain">是否拒绝再次加群</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupKick(long groupQQ, long qq, bool rejectAddAgain = false)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    user_id = qq,
+                    reject_add_request = rejectAddAgain
+                };
+                var res = await HttpEndpoints.SetGroupKick.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 退出群组
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <returns></returns>
+        public async Task<bool> SetGroupLeave(long groupQQ)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                };
+                var res = await HttpEndpoints.SetGroupLeave.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 群戳一戳
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="qq">qq 号</param>
+        /// <returns></returns>
+        public async Task<bool> GroupTouch(long groupQQ, long qq)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    user_id = qq,
+                };
+                var res = await HttpEndpoints.GroupTouch.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 上传私聊文件
+        /// 只能上传本地文件, 需要上传 http 文件的话请先下载至本地
+        /// </summary>
+        /// <param name="qq">qq 号</param>
+        /// <param name="file">文件路径</param>
+        /// <param name="name">文件名</param>
+        /// <returns></returns>
+        public async Task<UploadInfo?> UploadPrivateFile(long qq, string file, string name)
+        {
+            try
+            {
+                var obj = new
+                {
+                    user_id = qq,
+                    file,
+                    name
+                };
+                var res = await HttpEndpoints.UploadPrivateFile.PostAsync<UploadInfo>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 上传群文件
+        /// 只能上传本地文件, 需要上传 http 文件的话请先下载至本地
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="file">文件路径</param>
+        /// <param name="name">文件名</param>
+        /// <returns></returns>
+        public async Task<UploadInfo?> UploadGroupFile(long groupQQ, string file, string name)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    file,
+                    name
+                };
+                var res = await HttpEndpoints.UploadGroupFile.PostAsync<UploadInfo>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 删除群文件
+        /// 只能上传本地文件, 需要上传 http 文件的话请先下载至本地
+        /// </summary>
+        /// <param name="groupQQ">群号</param>
+        /// <param name="fileId">文件ID</param>
+        /// <param name="busid">文件类型</param>
+        /// <returns></returns>
+        public async Task<bool> DeleteGroupFile(long groupQQ, string fileId, int busid)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    file_id = fileId,
+                    busid
+                };
+                var res = await HttpEndpoints.DeleteGroupFile.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 创建群文件文件夹
+        /// 仅能在根目录创建文件夹
+        /// </summary>
+        /// <returns></returns>
+        public async Task<UploadInfo?> CreateGroupFolder(long groupQQ, string name)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    folder_name = name
+                };
+                var res = await HttpEndpoints.CreateGroupFolder.PostAsync<UploadInfo>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 删除群文件文件夹
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> DeleteGroupFolder(long groupQQ, string folderId)
+        {
+            try
+            {
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    folder_id = folderId
+                };
+                var res = await HttpEndpoints.DeleteGroupFolder.PostAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 上传文件到缓存目录（保留）
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> UploadFile(string path)
+        {
+            try
+            {
+                await Task.Delay(1);
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 让Shamrock下载文件到缓存目录
+        /// </summary>
+        /// <param name="url">url和base64二选一，两个均传优选url</param>
+        /// <param name="base64">base64</param>
+        /// <param name="name">文件名称,默认：文件md5</param>
+        /// <param name="threadCount">下载的线程数量	</param>
+        /// <param name="headers">请求头</param>
+        /// <returns></returns>
+        public async Task<RecordInfo?> DownloadFile1(string url, string base64 = "", string name = "", int threadCount = 1, string headers = "")
+        {
+            try
+            {
+                var obj = new
+                {
+                    url,
+                    base64,
+                    name,
+                    headers,
+                    thread_cnt = threadCount
+                };
+                var res = await HttpEndpoints.DownloadFile.PostAsync<RecordInfo>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 让Shamrock下载文件到缓存目录
+        /// </summary>
+        /// <param name="url">url和base64二选一，两个均传优选url</param>
+        /// <param name="base64">base64</param>
+        /// <param name="name">文件名称,默认：文件md5</param>
+        /// <param name="threadCount">下载的线程数量</param>
+        /// <param name="headers">请求头</param>
+        /// <returns></returns>
+        public async Task<RecordInfo?> DownloadFile(string url, string base64 = "", string name = "", int threadCount = 1, IEnumerable<string>? headers = null)
+        {
+            try
+            {
+                var obj = new
+                {
+                    url,
+                    base64,
+                    name,
+                    headers,
+                    thread_cnt = threadCount
+                };
+                var res = await HttpEndpoints.DownloadFile.PostAsync<RecordInfo>(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        #endregion
+
+        #region 发送消息
+        /// <summary>
+        /// 发送私聊，返回消息id
+        /// </summary>
+        /// <param name="qq">QQ 号</param>
+        /// <param name="message">消息内容</param>
+        /// <param name="autoEscape">是否解析 CQ 码。</param>
+        /// <returns></returns>
+        public async Task<string> SendPrivateMsgAsync(long qq, MessageChain message, bool autoEscape = false)
+        {
+            try
+            {
+                if (qq <= 0) return "";
+                if (message == null) return "";
+                var obj = new
+                {
+                    user_id = qq,
+                    message,
+                    auto_escape = autoEscape
+                };
+                var res = await HttpEndpoints.SendPrivateMsg.SendMsgAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 发送群聊消息，返回消息id
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <param name="message">消息内容</param>
+        /// <param name="autoEscape">是否解析 CQ 码。</param>
+        /// <returns></returns>
+        public async Task<string> SendGroupMsgAsync(long groupQQ, MessageChain message, bool autoEscape = false)
+        {
+            try
+            {
+                if (groupQQ <= 0) return "";
+                if (message == null) return "";
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    message,
+                    auto_escape = autoEscape
+                };
+                var res = await HttpEndpoints.SendGroupMsg.SendMsgAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 发送消息，返回消息id
+        /// </summary>
+        /// <param name="qq"></param>
+        /// <param name="message">消息内容</param>
+        /// <param name="autoEscape">是否解析 CQ 码。</param>
+        /// <returns></returns>
+        public async Task<string> SendMsgAsync(MessageType type, long qq, long groupQQ, long discussId, object message, bool autoEscape = false)
+        {
+            try
+            {
+                if (qq <= 0 || groupQQ <= 0) return "";
+                if (message == null) return "";
+                var obj = new
+                {
+                    message_type = type,
+                    user_id = qq,
+                    group_id = groupQQ,
+                    discuss_id = discussId,
+                    message,
+                    auto_escape = autoEscape
+                };
+                var res = await HttpEndpoints.SendMsg.SendMsgAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 发送群聊合并转发
+        /// </summary>
+        /// <param name="groupQQ"></param>
+        /// <param name="messages"></param>
+        /// <returns></returns>
+        public async Task<string> SendGroupForwardMsgAsync(long groupQQ, object messages)
+        {
+            try
+            {
+                if (groupQQ <= 0) return "";
+                if (messages == null) return "";
+                var obj = new
+                {
+                    group_id = groupQQ,
+                    messages
+                };
+                var res = await HttpEndpoints.SendGroupForwardMsg.SendMsgAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 发送私聊合并转发
+        /// </summary>
+        /// <param name="qq"></param>
+        /// <param name="messages"></param>
+        /// <returns></returns>
+        public async Task<string> SendPrivateForwardMsgAsync(long qq, object messages)
+        {
+            try
+            {
+                if (qq <= 0) return "";
+                if (messages == null) return "";
+                var obj = new
+                {
+                    user_id = qq,
+                    messages
+                };
+                var res = await HttpEndpoints.SendPrivateForwardMsg.SendMsgAsync(config, obj);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        #endregion
+        #endregion
+    }
+}

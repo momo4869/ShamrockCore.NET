@@ -67,10 +67,8 @@ namespace ShamrockCore.Test
             #region 接口测试
             //System.Console.WriteLine(bot.FriendSysMsg.ToJsonString());
             #endregion
-            while (true)
-            {
-                Thread.Sleep(10);
-            }
+
+            Console.ReadKey();
         }
     }
 }

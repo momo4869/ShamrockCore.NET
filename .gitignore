@@ -5,6 +5,8 @@
 /.vs/ShamrockCore/v17
 /.vs
 /.idea
+[Bb]in/
+[Oo]bj/
 /ShamrockCore/bin/**
 /ShamrockCore/obj/**
 /ShamrockCore.Test
